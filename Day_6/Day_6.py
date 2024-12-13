@@ -27,14 +27,16 @@ def is_stuck_in_loop(map_list, pos):
     facing = 0
     start = pos
     count = 0
+    already_counted = set()
     while True:
         new_pos, new_facing = next_turn(map_list, pos, facing, "#O")
         if facing != new_facing:
             new_box = ((pos[0] + directions[facing][0]), (pos[1] + directions[facing][1]))
-            if new_box in box_visited:
+            if (new_box, facing) in box_visited and (new_box, facing) not in already_counted:
                 count += 1
+                already_counted.add((new_box, facing))
             else:
-                box_visited.add(new_box)
+                box_visited.add((new_box, facing))
             facing = new_facing
         pos = new_pos
         if count == 4:
